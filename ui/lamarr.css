@@ -1,0 +1,320 @@
+/* LAMARR — Giao diện cockpit CSI (không dùng theme RuView) */
+
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #07060f;
+  --bg-panel: #0f0d1a;
+  --bg-card: #14112a;
+  --border: rgba(120, 90, 255, 0.25);
+  --accent: #00f5d4;
+  --accent2: #ff6bcb;
+  --accent3: #7b61ff;
+  --text: #e8e4ff;
+  --muted: #8b85a8;
+  --live: #00f5d4;
+  --sim: #ffb347;
+  --off: #ff4d6d;
+  --font: 'Be Vietnam Pro', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  overflow: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(123, 97, 255, 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(0, 245, 212, 0.08), transparent),
+    var(--bg);
+}
+
+#lamarr-root {
+  display: grid;
+  grid-template-columns: 220px 1fr 300px;
+  grid-template-rows: 56px 1fr 72px;
+  height: 100vh;
+  gap: 0;
+}
+
+/* Header bar */
+.lamarr-esp32-banner {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 10px 20px;
+  background: rgba(255, 77, 109, 0.12);
+  border-bottom: 1px solid rgba(255, 77, 109, 0.35);
+  color: #ffb4c4;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.lamarr-topbar {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(15, 13, 26, 0.92);
+  backdrop-filter: blur(12px);
+}
+
+.lamarr-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: var(--accent);
+  text-shadow: 0 0 24px rgba(0, 245, 212, 0.4);
+}
+
+.lamarr-logo span {
+  color: var(--accent2);
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+  display: block;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.lamarr-status-pill {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.lamarr-status-pill.live { border-color: var(--live); color: var(--live); background: rgba(0,245,212,0.08); }
+.lamarr-status-pill.sim { border-color: var(--sim); color: var(--sim); background: rgba(255,179,71,0.08); }
+.lamarr-status-pill.wait { border-color: var(--muted); color: var(--muted); }
+.lamarr-status-pill.off { border-color: var(--off); color: var(--off); }
+
+/* Sidebar */
+.lamarr-sidebar {
+  grid-row: 2;
+  border-right: 1px solid var(--border);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg-panel);
+}
+
+.lamarr-nav-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lamarr-nav-btn:hover { background: rgba(123,97,255,0.12); color: var(--text); }
+.lamarr-nav-btn.active {
+  background: linear-gradient(90deg, rgba(123,97,255,0.35), rgba(0,245,212,0.12));
+  color: var(--accent);
+  border-left: 3px solid var(--accent);
+}
+
+.lamarr-sidebar-note {
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.5;
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.lamarr-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px 12px;
+  font-size: 0.68rem;
+}
+
+.lamarr-legend .leg {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: var(--mono);
+}
+
+.lamarr-legend .cold { background: linear-gradient(90deg, #1a1030, #2a1850); color: #9b8fd4; }
+.lamarr-legend .mid { background: linear-gradient(90deg, #3d2060, #5a3080); color: #d4a0ff; }
+.lamarr-legend .hot { background: linear-gradient(90deg, #ff6bcb, #00f5d4); color: #0a0614; font-weight: 600; }
+
+.lamarr-panel-body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 245, 212, 0.03) 2px,
+    rgba(0, 245, 212, 0.03) 4px
+  );
+  border-radius: 0 0 14px 14px;
+}
+
+/* Main stage */
+.lamarr-stage {
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  min-height: 0;
+}
+
+.lamarr-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+.lamarr-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent3);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.lamarr-panel-body {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.lamarr-panel-body canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+#heatmap-canvas { image-rendering: pixelated; }
+
+#scan-viewport canvas { border-radius: 0 0 14px 14px; }
+
+/* Right metrics */
+.lamarr-metrics {
+  grid-row: 2;
+  border-left: 1px solid var(--border);
+  padding: 14px;
+  overflow-y: auto;
+  background: var(--bg-panel);
+}
+
+.lamarr-metrics h3 {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent2);
+  margin-bottom: 12px;
+}
+
+.metric-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.metric-card label {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.metric-card .val {
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.metric-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.metric-bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent3), var(--accent));
+  border-radius: 2px;
+  transition: width 0.2s;
+}
+
+#spectrum-mini {
+  width: 100%;
+  height: 64px;
+  margin-top: 12px;
+  border-radius: 8px;
+  background: #06050c;
+}
+
+/* Footer */
+.lamarr-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 20px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  background: var(--bg-panel);
+}
+
+.lamarr-footer strong { color: var(--text); }
+
+@media (max-width: 1100px) {
+  #lamarr-root {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px auto 1fr auto 56px;
+    overflow-y: auto;
+  }
+  .lamarr-sidebar, .lamarr-metrics { display: none; }
+  .lamarr-stage { grid-row: 3; grid-template-rows: 280px 280px; }
+}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#7b61ff">
+  <meta name="description" content="LAMARR — Cảm biến WiFi CSI, heatmap & quét 3D">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>LAMARR — Cảm biến CSI</title>
+  <link rel="stylesheet" href="lamarr.css?v=3">
+  <link rel="manifest" href="manifest.json">
+  <script>
+    /* Xóa cache RuView cũ ngay khi mở trang */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((r) => r.forEach((x) => x.unregister()));
+    }
+    if (window.caches) {
+      caches.keys().then((keys) => keys.filter((k) => !k.startsWith('lamarr')).forEach((k) => caches.delete(k)));
+    }
+  </script>
+</head>
+<body>
+  <div id="lamarr-root">
+    <header class="lamarr-topbar">
+      <div class="lamarr-logo">
+        LAMARR
+        <span>CẢM BIẾN KHÔNG GIAN · CSI THỰC</span>
+      </div>
+      <div id="status-pill" class="lamarr-status-pill wait">ĐANG KHỞI ĐỘNG…</div>
+    </header>
+    <div id="esp32-banner" class="lamarr-esp32-banner" hidden>
+      Chưa nhận CSI từ ESP32. Kiểm tra firmware, WiFi provision và target-ip máy tính.
+    </div>
+
+    <aside class="lamarr-sidebar">
+      <button type="button" class="lamarr-nav-btn active">📡 Quét CSI</button>
+      <button type="button" class="lamarr-nav-btn" onclick="location.href='observatory.html'">🔮 Đài 3D</button>
+      <a href="lamarr-legacy.html" class="lamarr-nav-btn" style="text-decoration:none;color:inherit">⚙ Cài đặt nâng cao</a>
+      <p class="lamarr-sidebar-note">
+        Bản đồ nhiệt 20×20 từ trường CSI thật.<br>
+        Không dùng skeleton / pose giả.
+      </p>
+      <div class="lamarr-legend">
+        <span class="leg cold">Yếu</span>
+        <span class="leg mid">Trung bình</span>
+        <span class="leg hot">Mạnh</span>
+      </div>
+    </aside>
+
+    <main class="lamarr-stage">
+      <section class="lamarr-panel">
+        <div class="lamarr-panel-head">
+          <span>Heatmap sàn phòng (20×20)</span>
+          <span id="panel-frame-count">0 khung</span>
+        </div>
+        <div class="lamarr-panel-body">
+          <canvas id="heatmap-canvas" width="480" height="480"></canvas>
+        </div>
+      </section>
+
+      <section class="lamarr-panel">
+        <div class="lamarr-panel-head">
+          <span>Quét 3D — điểm sáng CSI</span>
+          <span>LAMARR</span>
+        </div>
+        <div class="lamarr-panel-body" id="scan-viewport"></div>
+      </section>
+    </main>
+
+    <aside class="lamarr-metrics">
+      <h3>Chỉ số trực tiếp</h3>
+      <div class="metric-grid">
+        <div class="metric-card">
+          <label>Hiện diện</label>
+          <div class="val" id="m-presence">—</div>
+        </div>
+        <div class="metric-card">
+          <label>Chuyển động</label>
+          <div class="val" id="m-motion">—</div>
+          <div class="metric-bar"><div id="bar-motion" style="width:0%"></div></div>
+        </div>
+        <div class="metric-card">
+          <label>Độ tin cậy CSI</label>
+          <div class="val" id="m-conf">—</div>
+          <div class="metric-bar"><div id="bar-conf" style="width:0%"></div></div>
+        </div>
+        <div class="metric-card">
+          <label>RSSI</label>
+          <div class="val" id="m-rssi">—</div>
+        </div>
+        <div class="metric-card">
+          <label>Công suất chuyển động</label>
+          <div class="val" id="m-motion-pwr">—</div>
+        </div>
+        <div class="metric-card">
+          <label>Band nhịp thở</label>
+          <div class="val" id="m-breath">—</div>
+          <div class="metric-bar"><div id="bar-breath" style="width:0%"></div></div>
+        </div>
+        <div class="metric-card">
+          <label>Node ESP32</label>
+          <div class="val" id="m-nodes">0</div>
+        </div>
+        <div class="metric-card">
+          <label>Nguồn server</label>
+          <div class="val" id="m-src">—</div>
+        </div>
+      </div>
+      <canvas id="spectrum-mini" width="260" height="64"></canvas>
+    </aside>
+
+    <footer class="lamarr-footer">
+      <span>Trạng thái: <strong id="footer-health">—</strong></span>
+      <span>Nguồn dữ liệu: <strong id="footer-source">—</strong></span>
+      <span>Số khung CSI: <strong id="footer-fps">0</strong></span>
+      <span>Cập nhật lúc: <strong id="footer-ts">—</strong></span>
+    </footer>
+  </div>
+
+  <script type="module" src="lamarr-app.js?v=3"></script>
+</body>
+</html>

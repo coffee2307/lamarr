@@ -1,0 +1,25 @@
+{
+  "name": "LAMARR — Cảm biến WiFi CSI",
+  "short_name": "LAMARR",
+  "description": "Cảm biến không gian qua CSI thực từ ESP32 — heatmap và quét 3D",
+  "start_url": "/ui/index.html",
+  "display": "standalone",
+  "background_color": "#0a0f14",
+  "theme_color": "#00a896",
+  "orientation": "any",
+  "categories": ["utilities", "medical"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
